@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MacroFlow</string>
+    <string name="app_full_name">MacroFlow — Touch Macro Studio</string>
+    <string name="accessibility_service_description">MacroFlow Accessibility Service enables dispatching automated touch gestures and macro replay on your screen. No screen data is collected or transmitted.</string>
+    <string name="floating_service_notification_title">MacroFlow Floating Controls</string>
+    <string name="floating_service_notification_text">Floating macro bar active. Tap handle to expand.</string>
+</resources>

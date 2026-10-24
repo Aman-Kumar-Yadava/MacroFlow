@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Touch Macro Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,26 A28,28 0 1,1 26,54"
+        android:strokeWidth="5"
+        android:strokeColor="#22C55E"
+        android:strokeLineCap="round" />
+    <!-- Touch Pointer Target Dot -->
+    <path
+        android:fillColor="#4ADE80"
+        android:pathData="M26,54m-4,0a4,4 0 1,0 8,0a4,4 0 1,0 -8,0" />
+    <!-- Center Play Action Arrow -->
+    <path
+        android:fillColor="#22C55E"
+        android:pathData="M48,40 L68,54 L48,68 Z" />
+    <!-- Gesture Flow Accents -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M65,30 A32,32 0 0,1 78,45"
+        android:strokeWidth="3"
+        android:strokeColor="#16A34A"
+        android:strokeLineCap="round" />
+</vector>

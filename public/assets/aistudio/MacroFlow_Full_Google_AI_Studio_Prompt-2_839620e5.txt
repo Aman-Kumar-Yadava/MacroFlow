@@ -1,0 +1,844 @@
+PROJECT: UNIVERSAL ANDROID MACRO RECORDER & PLAYER
+Application name: MacroFlow — Touch Macro Studio
+Package name: com.macroflow.touchstudio
+
+YOUR ROLE
+Act as a senior Android application architect, Kotlin developer, Android system integration engineer, gaming utility designer, and Material 3 UI/UX specialist.
+
+Build a complete, functional, native Android application that allows users to create, manage, configure, and replay saved touch macros. The app should bring the convenience of floating gaming tools found in OnePlus Game Assistant, OPPO Game Assistant, and realme Game Assistant to compatible Android devices from different manufacturers.
+
+Use the supplied screenshots as visual references for the macro editor, floating controls, recording workflow, repetition settings, playback speed, and button opacity. Create an original application with comparable functionality and interaction patterns. Do not copy OEM logos, proprietary assets, trademarks, or private system interfaces.
+
+The goal is a working application, not just a UI mockup.
+
+1. PROJECT OBJECTIVES
+The application must:
+- Allow users to create named macros.
+- Record supported touch interactions using a technically valid Android implementation.
+- Save recorded macros locally.
+- Replay supported recorded gestures.
+- Allow users to edit macro settings.
+- Provide configurable repetition counts.
+- Provide adjustable playback speed.
+- Display a floating macro button over compatible applications.
+- Allow users to access saved macros while another application is open.
+- Provide a macro preview screen.
+- Support editing, renaming, duplicating, and deleting macros.
+- Persist macros between app launches and device restarts.
+- Handle screen rotation, different screen resolutions, and aspect ratios.
+- Work on compatible Android devices without requiring root access.
+- Clearly explain device and Android-version limitations.
+
+Prioritize correct gesture execution, data integrity, usability, and reliability over decorative animations.
+
+2. REQUIRED TECHNOLOGY STACK
+Build a native Android application using:
+- Kotlin.
+- Android Studio-compatible Gradle project structure.
+- Jetpack Compose.
+- Material 3 components.
+- Material 3 adaptive layouts where appropriate.
+- Coroutines and Flow for asynchronous work.
+- Room for structured local storage, or another suitable local persistence mechanism.
+- DataStore for user preferences.
+- Android AccessibilityService for supported gesture playback.
+- WindowManager and an appropriate overlay window type for the floating toolbar.
+- Foreground-service APIs when required and permitted by the target Android version.
+- Android-compatible dependency versions.
+
+Use a stable, mutually compatible Android Gradle Plugin, Kotlin version, and dependency set. Set minSdk to Android 8.0 (API 26), unless a specific implementation constraint requires a different minimum version. Target the latest stable Android SDK available in the development environment.
+
+Do not use Python, a web-based simulation, or JavaScript to simulate native Android behavior. Do not create a WebView-based interface.
+
+The project must be structured so it can be opened, compiled, tested, and debugged in Android Studio. If Google AI Studio cannot compile or package a native Android project directly, generate the complete source project and all required configuration files instead.
+
+3. APPLICATION IDENTITY AND DESIGN
+Create an original application called:
+MacroFlow — Touch Macro Studio
+
+Use the package name:
+com.macroflow.touchstudio
+
+Design inspiration:
+- Premium Google Pixel-style Material 3.
+- Clean dark surfaces for gaming.
+- Restrained accent colors.
+- Rounded cards.
+- Clear typography.
+- Smooth but lightweight animations.
+- Minimal visual clutter.
+- Comfortable touch targets.
+- High contrast and readable labels.
+- Consistent iconography.
+
+Default to a premium dark theme suitable for gaming. Also support light mode and system theme selection.
+
+The application should look like a native Android utility rather than a generic dashboard template. Avoid excessive gradients, neon effects, giant decorative graphics, and unnecessary glassmorphism.
+
+Use a green accent for primary recording and playback actions, with red reserved for destructive actions or recording-stop indicators where appropriate.
+
+Respect system insets, display cutouts, navigation modes, and edge-to-edge layout requirements.
+
+4. PRIMARY NAVIGATION
+Create these main destinations:
+1. Home
+2. My Macros
+3. Floating Controls
+4. Activity and Diagnostics
+5. Settings
+
+Use a bottom navigation bar on compact screens. On larger screens, use an adaptive navigation rail where appropriate.
+
+HOME SCREEN
+Display:
+- App logo and name.
+- A prominent Create Macro button.
+- A secondary Import Macro action if import is supported.
+- Number of saved macros.
+- Recently used macros.
+- Recording status.
+- Accessibility permission status.
+- Overlay permission status.
+- Playback service status.
+- A quick-start guide for new users.
+
+Show clear status indicators:
+- Ready.
+- Permission required.
+- Recording unavailable.
+- Playback unavailable.
+- Service stopped.
+- Device compatibility limitation.
+
+Do not show a green success indicator when the underlying functionality is not actually working.
+
+5. MACRO CREATION WORKFLOW
+Implement a complete macro creation wizard.
+
+STEP 1 — NAME THE MACRO
+Display:
+- Macro name.
+- Optional description.
+- Optional category.
+- Cancel.
+- Continue.
+
+Example names:
+- Navigation Sequence.
+- Repeated Tap.
+- Swipe Routine.
+- Custom Gesture.
+
+Validate empty names and duplicate-name behavior.
+
+STEP 2 — CHOOSE THE RECORDING METHOD
+Explain available recording methods.
+
+A. In-app recording mode:
+Record gestures within an application-controlled recording surface. This is the most reliable baseline and must be implemented first.
+
+B. Supported cross-app recording mode:
+If a valid Android-supported method is available for capturing touch events in another application, implement it behind a dedicated capability check.
+
+C. Unsupported device mode:
+Explain that unrestricted cross-app touch recording is unavailable through the currently supported APIs. Do not falsely claim to be recording.
+
+Do not treat screen recording, screenshot analysis, or visual tap indicators as equivalent to raw touch-event capture. Do not use an Accessibility Service to claim access to arbitrary touch events that Android does not expose to it. Do not silently substitute a simulated recording for a real recording.
+
+STEP 3 — RECORDING CONTROLS
+Create a recording screen containing:
+- Start Recording.
+- Pause Recording.
+- Resume Recording.
+- Stop Recording.
+- Cancel.
+- Elapsed time.
+- Number of captured actions.
+- Recording status.
+- A visible timeline.
+
+When recording is active, provide a clear indication that input capture is running.
+
+Capture the following information when available from the supported recording method:
+- Action type.
+- Start coordinates.
+- End coordinates.
+- Relative gesture duration.
+- Delay between consecutive actions.
+- Sequence order.
+- Pointer count, when supported.
+- Gesture path for swipes and drags.
+
+Record coordinates in normalized display space rather than assuming a fixed screen resolution. For example, store normalized coordinates as values between 0.0 and 1.0. Store gesture timing in milliseconds.
+
+Do not invent touch events or fabricate successful recordings. If a recording operation fails, preserve captured actions where possible and show an actionable error.
+
+STEP 4 — REVIEW THE RECORDING
+After recording stops, display:
+- Macro name.
+- Total duration.
+- Number of actions.
+- Ordered action list.
+- Gesture type.
+- Relative timing.
+- Edit action.
+- Preview action.
+- Save action.
+- Discard action.
+
+Allow the user to delete an individual recorded action. Where technically supported, allow users to adjust the delay before an action and the duration of a gesture. Maintain the original sequence order.
+
+6. MACRO EDITOR — MATCH THE REFERENCE WORKFLOW
+Create a dedicated macro editor inspired by the supplied screenshots.
+
+Screen title: Edit Macro
+
+At the top, display:
+- Back arrow.
+- Editable macro name.
+- Optional overflow menu.
+
+Provide two prominent actions:
+- Record Again.
+- Preview.
+
+Below those actions, show a Command Name card with an Edit control.
+
+BUTTON SETTINGS
+
+REPETITIONS
+Provide a configurable repetition count:
+- One-time playback.
+- User-defined number of repetitions.
+- An explicitly enabled continuous-repeat mode, if implemented.
+
+Use a sensible default of one repetition. Set a reasonable upper limit to prevent accidental, unbounded execution. If continuous playback is available, require the user to explicitly enable it.
+
+PLAYBACK SPEED
+Add a playback-speed slider supporting a clearly defined range, such as 0.25x to 3.0x. Display the current speed next to the slider.
+
+At 1.0x, reproduce stored timing as closely as the Android execution mechanism permits. For faster playback, scale inter-action delays and gesture durations consistently. For slower playback, increase them proportionally.
+
+Do not promise that every gesture can be accelerated without limitations. Respect Android gesture-dispatch constraints and minimum practical gesture durations. Show a warning if the requested playback speed cannot be achieved reliably.
+
+BUTTON OPACITY
+Add a floating-button opacity slider from 20% to 100%. Display the current percentage and apply the selected opacity to the floating macro control. Ensure the button remains sufficiently visible and accessible.
+
+BUTTON SIZE
+Include Small, Medium, and Large options.
+
+FLOATING-BUTTON APPEARANCE
+Provide options for:
+- Icon.
+- Label visibility.
+- Circular or rounded-square shape.
+- Accent color.
+- Opacity.
+- Size.
+
+BOTTOM ACTION BAR
+Include Delete and Save. Delete must require confirmation. Save must persist all changes. Prevent accidental loss of unsaved edits. If the user presses Back with unsaved changes, display a confirmation dialog.
+
+7. MACRO PREVIEW
+Implement a genuine preview feature.
+
+Show the recorded sequence as a visual timeline with:
+- Action number.
+- Gesture type.
+- Approximate start time.
+- Gesture duration.
+- Delay before the next action.
+- Total macro duration.
+- Selected playback speed.
+- Repetition count.
+
+Provide:
+- Play Preview.
+- Pause.
+- Resume.
+- Stop.
+- Restart.
+
+The preview must not accidentally execute gestures in an unrelated foreground application. If the macro is replayed only in an application-controlled preview environment, clearly distinguish this from actual cross-app playback. A visual preview is not proof that the macro can be executed in another application.
+
+8. FLOATING GAMING TOOLBAR
+Create a compact floating toolbar that can appear over compatible applications when the user explicitly enables it. Use original branding and graphics.
+
+COLLAPSED STATE
+Display a small floating circular or rounded-square handle with:
+- Adjustable position.
+- Adjustable opacity.
+- Drag-to-move behavior.
+- Edge snapping.
+- Compact appearance.
+- Persistent position across sessions.
+
+EXPANDED STATE
+When tapped, expand into a compact panel containing:
+- Record.
+- Stop Recording.
+- Saved Macros.
+- Play or Pause.
+- Stop Playback.
+- Settings.
+- Close.
+
+Only display actions that are currently available. If recording is unavailable on the current device, disable Record and explain why.
+
+SAVED MACRO SELECTOR
+Display saved macros in a compact list. Each row should contain:
+- Macro name.
+- Number of actions.
+- Total duration.
+- Repetition count.
+- Playback speed.
+- Play button.
+- Edit button.
+
+Allow users to select a macro and launch it without navigating to the main application.
+
+FLOATING WINDOW BEHAVIOR
+Request overlay permission only when the user chooses to enable floating controls. Explain why permission is needed. Use the appropriate window type for the Android version.
+
+Ensure the overlay does not unnecessarily block the underlying application. Provide a quick way to hide or dismiss the toolbar. Remove floating windows when no longer needed. Handle permission revocation gracefully.
+
+Do not attempt to conceal the application's identity or its use of accessibility functionality.
+
+9. GESTURE PLAYBACK ENGINE
+Build a dedicated playback engine with clear separation from the UI.
+
+Suggested components:
+- MacroRepository.
+- MacroPlaybackEngine.
+- GestureDispatcher.
+- MacroScheduler.
+- PlaybackStateManager.
+- OverlayController.
+- PermissionManager.
+- DeviceCapabilityChecker.
+
+Represent playback using explicit states:
+- Idle.
+- Preparing.
+- Playing.
+- Paused, when supported.
+- Stopping.
+- Completed.
+- Failed.
+
+Use a well-defined state machine. Prevent two macros from executing simultaneously. Ensure Stop cancels pending playback work as quickly as the underlying Android API allows. Do not allow background timers to continue dispatching gestures after the user has stopped playback.
+
+ANDROID ACCESSIBILITY SERVICE
+Implement an appropriately configured Accessibility Service for supported gesture playback. Declare the required gesture capability in the service metadata. Use Android's supported gesture-dispatch APIs.
+
+Handle:
+- Successful gesture dispatch.
+- Failed gesture dispatch.
+- Service disconnection.
+- Service interruption.
+- User disabling the service.
+- Permission revocation.
+- Invalid coordinates.
+- Display-size changes.
+- Foreground application changes, where reliably detectable.
+
+Respect Android gesture-dispatch limitations. If a new gesture cancels an existing gesture, report this accurately and manage playback state correctly. Use callbacks to track execution results. Do not assume that a successful method invocation means the intended gesture was successfully completed.
+
+ACCESSIBILITY PERMISSION ONBOARDING
+Create a dedicated onboarding screen explaining:
+- Why the Accessibility Service is needed.
+- Which actions it can perform.
+- How to enable it in Android Settings.
+- How to disable it later.
+
+Do not enable the service automatically. Do not use misleading permission descriptions. Do not repeatedly nag the user after they decline.
+
+10. MULTI-TOUCH AND COMPLEX GESTURES
+Design the data model so it can represent:
+- Tap.
+- Long press.
+- Swipe.
+- Drag.
+- Gesture paths.
+- Multiple sequential gestures.
+- Pointer information where supported.
+
+Support multi-touch playback only where the selected Android implementation can actually execute it. Do not pretend that several independent gesture-dispatch calls constitute a perfectly synchronized multi-touch gesture.
+
+If simultaneous multi-pointer execution is unsupported by the selected API or device, show a clear compatibility warning. Do not silently convert an unsupported gesture into a different action.
+
+11. LOCAL STORAGE
+All saved macros should remain on the user's device by default. Do not require an account or cloud service.
+
+Create a persistent data model. A macro record should contain fields similar to:
+- id
+- name
+- description
+- createdAt
+- updatedAt
+- category
+- actionCount
+- durationMs
+- repetitions
+- playbackSpeed
+- buttonOpacity
+- buttonSize
+- isContinuous
+- actions
+
+Each action should contain fields appropriate to its gesture type.
+
+Use a versioned serialization format for macro sequences.
+
+Support:
+- Create.
+- Read.
+- Update.
+- Delete.
+- Duplicate.
+- Rename.
+- Local export, if implemented.
+- Local import, if implemented.
+
+Validate imported data. Reject malformed or unreasonable macro files safely. Never execute an imported macro automatically. Ask the user to review and explicitly launch imported macros.
+
+Do not upload macro data, screen content, or gesture coordinates to a remote server.
+
+12. MY MACROS SCREEN
+Create a polished macro library with:
+- List view.
+- Grid view.
+- Search.
+- Sorting.
+- Recent macros.
+- Favorites.
+- Categories.
+- Rename.
+- Duplicate.
+- Edit.
+- Delete.
+- Play.
+
+Each macro card should show:
+- Name.
+- Action count.
+- Duration.
+- Repetition count.
+- Playback speed.
+- Last-used information, if available.
+
+Include an attractive empty state with a Create Macro button. Use efficient rendering for large collections.
+
+13. PLAYBACK SAFETY AND USER CONTROL
+Provide a prominent Stop control. The user must always have a practical way to stop a running macro.
+
+Before playback, show the selected macro name and its execution settings.
+
+For continuous playback, display a persistent running indicator and a clear Stop action.
+
+Do not execute macros unexpectedly after a device restart. Do not automatically start macros when a game launches. Do not execute macros on the lock screen or while the device is in an unintended state.
+
+Pause or stop playback when the user disables the service or when a critical execution failure occurs.
+
+Where reliable foreground-app detection is available, allow the user to configure which applications are permitted as playback targets. Do not claim that app-target restrictions are a perfect security boundary.
+
+Do not implement hidden background automation. Do not bypass Android permission prompts. Do not attempt to evade security systems or anti-cheat detection. The application should be transparent about its behavior.
+
+14. ACTIVITY AND DIAGNOSTICS
+Create an Activity screen displaying:
+- Recent recordings.
+- Recent playback sessions.
+- Successful gesture dispatches.
+- Failed gesture dispatches.
+- Interrupted sessions.
+- Playback duration.
+- Last error.
+
+Provide an option to clear diagnostic history. Keep logs local. Do not log sensitive screen contents or unrelated application data.
+
+Add a developer diagnostics screen that can show:
+- Android version.
+- Device manufacturer.
+- Device model.
+- Display dimensions.
+- Overlay permission state.
+- Accessibility service state.
+- Playback engine state.
+- Available gesture capabilities.
+
+Do not claim that a device supports a feature until it has been checked.
+
+15. SETTINGS
+Create settings for:
+
+APPEARANCE
+- System theme.
+- Light theme.
+- Dark theme.
+- Accent color.
+- Animation preferences.
+
+FLOATING CONTROLS
+- Enable or disable the floating toolbar.
+- Button opacity.
+- Button size.
+- Default position.
+- Edge snapping.
+- Default expanded or collapsed state.
+
+PLAYBACK
+- Default playback speed.
+- Default repetition count.
+- Default inter-action delay, where applicable.
+- Stop-on-error behavior.
+- Confirmation before continuous playback.
+
+RECORDING
+- Default macro naming behavior.
+- Default recording method.
+- Recording countdown.
+- Recording indicator visibility.
+
+PRIVACY
+- Explain which permissions are used.
+- Explain how macro data is stored.
+- Provide controls for deleting local data.
+- Explain that accessibility gestures can interact with the active screen.
+
+ABOUT
+- Application version.
+- Open-source licenses, if applicable.
+- Privacy policy.
+- Troubleshooting.
+- Feedback.
+
+16. ANDROID COMPATIBILITY
+Design the application to work across compatible Android devices, including phones from:
+- Samsung.
+- Google Pixel.
+- OnePlus.
+- OPPO.
+- realme.
+- Xiaomi.
+- Redmi.
+- Motorola.
+- Other Android manufacturers.
+
+Do not hardcode manufacturer-specific APIs as if they were universally available. Use public Android APIs whenever possible. Check API availability at runtime.
+
+Handle different screen resolutions, refresh rates, aspect ratios, navigation modes, and display cutouts. Respect Android background execution restrictions. Use a foreground service only where appropriate and permitted. Declare required service types and permissions for the target Android version. Handle notification-permission requirements where applicable.
+
+Do not request unrelated permissions. Do not require root access for the baseline feature set. If a device-specific capability requires a privileged system API, explain the limitation rather than pretending it is available to an ordinary application.
+
+17. ACCESSIBILITY AND PERFORMANCE
+The application itself should be accessible.
+
+Use:
+- Meaningful content descriptions.
+- Readable text.
+- Adequate contrast.
+- Large enough touch targets.
+- Screen-reader-friendly controls.
+- Keyboard navigation where appropriate.
+
+Keep gesture scheduling independent of expensive UI recompositions. Avoid blocking the main thread. Avoid unnecessary polling. Cancel coroutines and scheduled work when no longer needed. Handle process recreation and service reconnection safely. Avoid excessive battery consumption.
+
+18. OPTIONAL SHIZUKU INTEGRATION
+Enhance MacroFlow with optional Shizuku support for Android devices that can benefit from additional system-level capabilities.
+
+CORE REQUIREMENT
+Shizuku must be an optional enhancement, not a mandatory dependency. The application must continue to function in Standard Mode when Shizuku is not installed, not running, or not authorized. Do not require root access.
+
+Use the official Shizuku API and follow its current integration documentation.
+
+SHIZUKU ONBOARDING
+Create a dedicated Shizuku settings screen displaying:
+- Shizuku installed status.
+- Shizuku service status.
+- Permission status.
+- Detected privilege mode, where available.
+- Connection status.
+- Supported capabilities.
+- Last connection error.
+
+Provide buttons to:
+- Open Shizuku.
+- Check Connection.
+- Request Shizuku Authorization.
+- Disconnect.
+- View Setup Instructions.
+
+Do not automatically enable wireless debugging or attempt to grant elevated permissions without the user's explicit involvement.
+
+RUNTIME CAPABILITY DETECTION
+Implement a ShizukuCapabilityManager. At runtime, check:
+- Whether the Shizuku API is available.
+- Whether the Shizuku service is running.
+- Whether the user has authorized MacroFlow.
+- Whether the service is connected.
+- Whether the current privilege level is ADB/shell or root, where supported.
+- Whether each required system operation is available.
+- Whether the operation succeeds on the current Android version.
+
+Do not infer capabilities solely from manufacturer or Android version. Use capability-specific checks. If an operation is unsupported, disable the corresponding feature and explain why.
+
+GESTURE PLAYBACK ARCHITECTURE
+Implement a GesturePlaybackBackend interface. Provide:
+- AccessibilityGestureBackend.
+- Optional ShizukuGestureBackend, only if a verified implementation is available.
+
+The Accessibility backend must use supported Android accessibility gesture APIs. The Shizuku backend must use only verified, supported system operations and must be isolated from the standard playback engine.
+
+Do not assume Shizuku authorization automatically enables input injection. Do not use undocumented system interfaces without documenting compatibility risks. Do not silently switch backends after a failed gesture. Report the actual execution result to the playback engine.
+
+RECORDING ARCHITECTURE
+Implement a separate MacroRecordingBackend interface. The initial recording implementation must support a real, working in-app recording mode. Investigate cross-app recording separately.
+
+Do not assume Shizuku exposes unrestricted raw touch events from other applications. Do not represent screen recording or screenshot analysis as raw touch recording. If no valid recording backend exists on the current device, display a clear compatibility message. Never fabricate recorded gestures.
+
+SYSTEM INTEGRATION
+Use Shizuku for additional system operations only when they provide a concrete benefit.
+
+Potential uses include:
+- Retrieving additional system information.
+- Checking supported system capabilities.
+- Accessing compatible system services.
+- Performing other verified, user-requested operations.
+
+Avoid using Shizuku merely to duplicate functionality that public Android APIs already provide. Do not run unnecessary shell commands repeatedly. Do not access unrelated application data. Do not attempt to bypass Android security restrictions or game anti-cheat mechanisms.
+
+CONNECTION LIFECYCLE
+Handle:
+- Shizuku not installed.
+- Shizuku service stopped.
+- Authorization denied.
+- Binder disconnected.
+- Device reboot.
+- Permission revoked.
+- Unsupported operation.
+- Root versus ADB privilege differences.
+- Android-version incompatibilities.
+
+When the connection is lost, stop dependent operations safely and preserve saved macros. Do not crash the application.
+
+USER INTERFACE
+Integrate Shizuku into the existing Material 3 settings interface. Use three capability states:
+- Standard Mode.
+- Shizuku Available.
+- Advanced Capabilities Unavailable.
+
+Do not display an Advanced Mode success indicator unless the corresponding functionality has been tested successfully.
+
+TESTING
+Create tests for:
+- Shizuku unavailable.
+- Shizuku running but unauthorized.
+- Shizuku authorized.
+- Connection lost during playback.
+- Unsupported system operation.
+- Standard-mode fallback.
+- Device reboot and reconnection.
+- Playback cancellation.
+- Permission revocation.
+
+Keep Shizuku integration isolated behind interfaces so it can be maintained independently of the macro editor and recording engine.
+
+ACCEPTANCE CRITERIA
+The app must function without Shizuku. When Shizuku is available, it must expose only verified additional capabilities. Do not claim universal cross-app recording, guaranteed multi-touch injection, or compatibility with every game unless those capabilities have been independently implemented and tested.
+
+19. TESTING REQUIREMENTS
+Create a testable architecture. Include unit tests for:
+- Macro serialization.
+- Coordinate normalization.
+- Playback-speed calculations.
+- Repetition-count validation.
+- Action ordering.
+- Delay calculations.
+- Playback state transitions.
+- Cancellation logic.
+- Macro editing.
+- Macro duplication.
+- Invalid macro data.
+
+Include instrumentation tests where practical for:
+- Database persistence.
+- Permission-state handling.
+- Overlay lifecycle.
+- Service lifecycle.
+- Gesture dispatch on a supported test device.
+
+Test these scenarios:
+1. Create a macro.
+2. Save it.
+3. Close the app.
+4. Reopen the app.
+5. Verify that the macro still exists.
+6. Edit the macro.
+7. Change repetition count.
+8. Change playback speed.
+9. Change floating-button opacity.
+10. Preview the macro.
+11. Start playback.
+12. Stop playback.
+13. Disable the Accessibility Service.
+14. Revoke overlay permission.
+15. Rotate the device.
+16. Change display dimensions.
+17. Attempt to play an invalid macro.
+18. Verify that playback does not continue after Stop.
+19. Verify that a failed gesture does not falsely appear successful.
+20. Verify that unavailable recording functionality is reported accurately.
+21. Test Shizuku absent, authorized, disconnected, and unsupported states.
+
+20. ERROR HANDLING
+Provide user-friendly messages for:
+- Accessibility permission missing.
+- Overlay permission missing.
+- Recording unsupported.
+- Gesture dispatch failure.
+- Playback interruption.
+- Invalid macro.
+- Storage failure.
+- Service disconnected.
+- Display configuration changed.
+- Unsupported multi-touch action.
+- Playback cancelled.
+- Shizuku unavailable.
+- Shizuku authorization denied.
+- Shizuku connection lost.
+- Unsupported privileged operation.
+
+Never report a macro as successfully recorded when no actions were captured. Never report a macro as successfully played when all gesture dispatches failed. Preserve unsaved work whenever practical.
+
+21. REQUIRED SOURCE CODE DELIVERABLES
+Generate the complete project source code, including:
+- settings.gradle.kts
+- Root build.gradle.kts
+- Module build.gradle.kts
+- AndroidManifest.xml
+- Kotlin source files.
+- Jetpack Compose UI.
+- Material 3 theme.
+- Accessibility Service implementation.
+- Accessibility Service XML configuration.
+- Gesture playback engine.
+- Overlay controller.
+- Macro repository.
+- Database entities and DAO, if Room is used.
+- Database configuration.
+- DataStore preferences.
+- Data models.
+- Navigation.
+- Permission onboarding.
+- Error handling.
+- Shizuku integration, if supported.
+- Unit tests.
+- Instrumentation tests where practical.
+- Resource files.
+- Application icon resources or placeholders.
+- README.md.
+- Build and installation instructions.
+
+Keep responsibilities separated across classes and packages. Do not place the entire application in a single Kotlin file. Do not use placeholder buttons for required functionality. Do not leave critical methods empty. Do not use hardcoded sample data as the permanent macro repository.
+
+Do not claim that the project compiles unless compilation has actually been verified. If a feature cannot be implemented with selected public Android APIs, document the exact limitation and provide the closest honest, functional alternative.
+
+22. IMPLEMENTATION ORDER
+
+PHASE 1 — FOUNDATION
+- Create the native Android project.
+- Configure Gradle.
+- Set up Material 3.
+- Implement navigation.
+- Implement the Home screen.
+- Implement the local macro data model.
+- Implement persistence.
+- Implement the macro library.
+
+PHASE 2 — MACRO EDITOR
+- Create the macro editor.
+- Implement naming and renaming.
+- Implement repetition settings.
+- Implement playback-speed settings.
+- Implement opacity settings.
+- Implement saving and deletion.
+- Implement the action timeline.
+
+PHASE 3 — GESTURE PLAYBACK
+- Implement Accessibility Service onboarding.
+- Implement the gesture dispatcher.
+- Implement supported tap and swipe playback.
+- Implement action sequencing.
+- Implement repetition handling.
+- Implement playback cancellation.
+- Implement execution status and error reporting.
+
+PHASE 4 — FLOATING TOOLBAR
+- Implement overlay permission onboarding.
+- Implement the floating handle.
+- Implement the expanded toolbar.
+- Implement saved-macro selection.
+- Implement playback controls.
+- Implement position persistence.
+
+PHASE 5 — RECORDING
+- Implement reliable in-app recording.
+- Implement pause and resume.
+- Implement recorded-action review.
+- Implement recording persistence.
+- Investigate supported cross-app recording methods separately.
+- Clearly identify unsupported capabilities.
+
+PHASE 6 — SHIZUKU INTEGRATION
+- Add Shizuku dependency using the current official integration guidance.
+- Implement connection and authorization handling.
+- Implement capability checks.
+- Add only verified system operations.
+- Test ADB/shell and root privilege differences where applicable.
+- Preserve Standard Mode when Shizuku is unavailable.
+
+PHASE 7 — POLISH
+- Add dark and light themes.
+- Improve animations.
+- Add diagnostics.
+- Add accessibility support.
+- Add tests.
+- Add troubleshooting.
+- Fix compilation and runtime errors.
+
+23. FINAL ACCEPTANCE CRITERIA
+The application is not complete merely because the screens look correct.
+
+A successful baseline implementation must allow a user to:
+1. Open the application.
+2. Create a macro.
+3. Record supported gestures through a functioning recording mechanism.
+4. Save the macro locally.
+5. Find the macro in My Macros.
+6. Edit its settings.
+7. Change repetitions.
+8. Change playback speed.
+9. Change floating-button opacity.
+10. Preview the recorded sequence.
+11. Enable required Android permissions voluntarily.
+12. Display the floating toolbar where supported.
+13. Select a saved macro.
+14. Replay supported gestures through the actual playback engine.
+15. Stop playback.
+16. Reopen the application and find the saved macro.
+17. Receive honest error messages when an operation is unsupported.
+18. Use the basic application without Shizuku.
+19. See only verified additional capabilities when Shizuku is enabled.
+
+The baseline implementation must not require root access. Do not claim unrestricted cross-app recording, perfect multi-touch reproduction, or universal game compatibility unless those capabilities have been implemented and verified.
+
+24. FIRST RESPONSE AND WORKFLOW
+Begin by explaining the architecture and identifying Android API limitations that affect recording or playback.
+
+Then create the complete project structure. Implement Phase 1 before moving to subsequent phases.
+
+After each phase, identify the files created and the functionality completed.
+
+If you cannot compile the project in the current environment, clearly state that it has not been compiled and provide precise Android Studio build instructions.
+
+Prioritize a genuinely working application over an impressive-looking mockup.
